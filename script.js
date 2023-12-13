@@ -1,23 +1,25 @@
 document.addEventListener('DOMContentLoaded', function() {
     const wordList = document.getElementById('wordList');
-    let touchStart = 0;
+    let touchStartY = 0;
+    let touchEndY = 0;
     let isScrolling;
 
     // Populate the list with random words
     for (let i = 0; i < 2000; i++) {
         const word = document.createElement('div');
         word.className = 'word';
-        word.textContent = '4Word ' + i;
+        word.textContent = 'Word ' + i;
         wordList.appendChild(word);
     }
 
     wordList.addEventListener('touchstart', function(e) {
-        touchStart = e.touches[0].clientY;
+        touchStartY = e.touches[0].clientY;
     }, false);
 
     wordList.addEventListener('touchend', function(e) {
-        const touchEnd = e.changedTouches[0].clientY;
-        if (Math.abs(touchStart - touchEnd) > 100) { // Detect a fast swipe
+        touchEndY = e.changedTouches[0].clientY;
+        const isFastSwipe = Math.abs(touchStartY - touchEndY) > 100;
+        if (isFastSwipe) {
             if (isScrolling) {
                 clearTimeout(isScrolling);
             }
@@ -29,23 +31,24 @@ document.addEventListener('DOMContentLoaded', function() {
         let lastScrollTop = wordList.scrollTop;
         isScrolling = setTimeout(function() {
             if (wordList.scrollTop === lastScrollTop) {
-                markScrollArea(lastScrollTop);
+                // Adjust marking based on scroll direction
+                const scrollDirection = touchStartY > touchEndY ? 'down' : 'up';
+                markScrollArea(lastScrollTop, scrollDirection);
             } else {
                 checkScrollEnd(); // Keep checking until scrolling stops
             }
-        }, 100); // Check every 100 milliseconds
+        }, 150); // Check interval
     }
 
-    function markScrollArea(scrollTop) {
-        const viewHeight = wordList.clientHeight;
-        const startIdx = Math.floor(scrollTop / 50);
-        const endIdx = Math.min(startIdx + Math.floor(viewHeight / 50), 2000);
-        for (let i = startIdx; i < endIdx; i++) {
-            const wordItem = wordList.children[i];
-            if (wordItem) {
-                wordItem.textContent = 'SCROLLED';
-                wordItem.style.color = 'green'; // Change color for visibility
-            }
+    function markScrollArea(scrollTop, scrollDirection) {
+        const itemIndex = scrollDirection === 'down' 
+                          ? Math.round((scrollTop + wordList.clientHeight) / 50) // Mark bottom of view for downward scroll
+                          : Math.round(scrollTop / 50); // Mark top of view for upward scroll
+
+        const wordItem = wordList.children[itemIndex];
+        if (wordItem) {
+            wordItem.textContent = 'SCROLLED';
+            wordItem.style.color = 'green'; // Change color for visibility
         }
     }
 });
