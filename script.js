@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('Fast swipe detected. Start:', scrollStart, 'End:', scrollEnd);
                 if (scrollObservations.length < 2) {
                     scrollObservations.push({ start: scrollStart, end: scrollEnd });
+                    markStopPoint(scrollEnd);
                     console.log('Observation recorded:', scrollObservations.length);
                 } else if (scrollObservations.length === 2) {
                     const predictedStop = predictStopPoint(scrollObservations);
@@ -46,5 +47,14 @@ document.addEventListener('DOMContentLoaded', function() {
         forceItem.textContent = 'FORCE';
         wordList.insertBefore(forceItem, wordList.children[Math.round(position / 50)]); // Adjust as per actual item height
         console.log('FORCE inserted at position:', position);
+    }
+
+    function markStopPoint(position) {
+        const itemIndex = Math.round(position / 50); // Assuming each item is approximately 50px tall
+        const itemAtStop = wordList.children[itemIndex];
+        if (itemAtStop) {
+            itemAtStop.textContent = 'STOP';
+            itemAtStop.style.color = 'red'; // Optional: change color for visibility
+        }
     }
 });
