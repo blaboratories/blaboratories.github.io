@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     for (let i = 0; i < 2000; i++) {
         const word = document.createElement('div');
         word.className = 'word';
-        word.textContent = 'Word ' + i;
+        word.textContent = '1Word ' + i;
         wordList.appendChild(word);
     }
 
