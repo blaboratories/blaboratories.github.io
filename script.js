@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     for (let i = 0; i < 2000; i++) {
         const word = document.createElement('div');
         word.className = 'word';
-        word.textContent = '1Word ' + i;
+        word.textContent = 'Word ' + i;
         wordList.appendChild(word);
     }
 
@@ -22,17 +22,14 @@ document.addEventListener('DOMContentLoaded', function() {
         if (Math.abs(touchStart - touchEnd) > 100) { // Detect a fast swipe
             setTimeout(() => {
                 const scrollEnd = wordList.scrollTop;
-                console.log('Fast swipe detected. Start:', scrollStart, 'End:', scrollEnd);
                 if (scrollObservations.length < 2) {
                     scrollObservations.push({ start: scrollStart, end: scrollEnd });
-                    markStopPoint(scrollEnd);
-                    console.log('Observation recorded:', scrollObservations.length);
+                    markStopPoint(scrollEnd, 'STOP ' + (scrollObservations.length));
                 } else if (scrollObservations.length === 2) {
                     const predictedStop = predictStopPoint(scrollObservations);
-                    console.log('Predicted stop:', predictedStop);
                     insertForceItem(predictedStop);
                 }
-            }, 300); // Adjust timing as needed
+            }, 500); // Increased delay for better accuracy
         }
     }, false);
 
@@ -42,18 +39,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function insertForceItem(position) {
-        const forceItem = document.createElement('div');
-        forceItem.className = 'word';
-        forceItem.textContent = 'FORCE';
-        wordList.insertBefore(forceItem, wordList.children[Math.round(position / 50)]); // Adjust as per actual item height
-        console.log('FORCE inserted at position:', position);
+        const itemIndex = Math.round(position / 50); // Assuming each item is approximately 50px tall
+        const forceItem = wordList.children[itemIndex];
+        if (forceItem) {
+            forceItem.textContent = 'FORCE';
+            forceItem.style.color = 'blue'; // Optional: change color for visibility
+        }
     }
 
-    function markStopPoint(position) {
+    function markStopPoint(position, text) {
         const itemIndex = Math.round(position / 50); // Assuming each item is approximately 50px tall
         const itemAtStop = wordList.children[itemIndex];
         if (itemAtStop) {
-            itemAtStop.textContent = 'STOP';
+            itemAtStop.textContent = text;
             itemAtStop.style.color = 'red'; // Optional: change color for visibility
         }
     }
