@@ -1,12 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
     const wordList = document.getElementById('wordList');
     let touchStart = 0;
+    let isScrolling;
 
     // Populate the list with random words
     for (let i = 0; i < 2000; i++) {
         const word = document.createElement('div');
         word.className = 'word';
-        word.textContent = '3Word ' + i;
+        word.textContent = '4Word ' + i;
         wordList.appendChild(word);
     }
 
@@ -17,12 +18,23 @@ document.addEventListener('DOMContentLoaded', function() {
     wordList.addEventListener('touchend', function(e) {
         const touchEnd = e.changedTouches[0].clientY;
         if (Math.abs(touchStart - touchEnd) > 100) { // Detect a fast swipe
-            // Wait for a moment to allow scrolling to stop
-            setTimeout(function() {
-                markScrollArea(wordList.scrollTop);
-            }, 500); // Delay to account for inertial scrolling
+            if (isScrolling) {
+                clearTimeout(isScrolling);
+            }
+            checkScrollEnd();
         }
     }, false);
+
+    function checkScrollEnd() {
+        let lastScrollTop = wordList.scrollTop;
+        isScrolling = setTimeout(function() {
+            if (wordList.scrollTop === lastScrollTop) {
+                markScrollArea(lastScrollTop);
+            } else {
+                checkScrollEnd(); // Keep checking until scrolling stops
+            }
+        }, 100); // Check every 100 milliseconds
+    }
 
     function markScrollArea(scrollTop) {
         const viewHeight = wordList.clientHeight;
