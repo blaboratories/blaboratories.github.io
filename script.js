@@ -1,26 +1,26 @@
 document.addEventListener('DOMContentLoaded', function() {
     const wordList = document.getElementById('wordList');
     let touchStart = 0;
-    let lastScrollTop = 0;
 
     // Populate the list with random words
     for (let i = 0; i < 2000; i++) {
         const word = document.createElement('div');
         word.className = 'word';
-        word.textContent = '2Word ' + i;
+        word.textContent = '3Word ' + i;
         wordList.appendChild(word);
     }
 
     wordList.addEventListener('touchstart', function(e) {
         touchStart = e.touches[0].clientY;
-        lastScrollTop = wordList.scrollTop;
     }, false);
 
     wordList.addEventListener('touchend', function(e) {
         const touchEnd = e.changedTouches[0].clientY;
         if (Math.abs(touchStart - touchEnd) > 100) { // Detect a fast swipe
-            // Immediately mark the current view area with "SCROLLED"
-            markScrollArea(lastScrollTop);
+            // Wait for a moment to allow scrolling to stop
+            setTimeout(function() {
+                markScrollArea(wordList.scrollTop);
+            }, 500); // Delay to account for inertial scrolling
         }
     }, false);
 
