@@ -3,14 +3,14 @@ document.addEventListener('DOMContentLoaded', function() {
     let touchStartTime = 0;
     let touchStartY = 0;
     let isScrolling = false;
-    let deceleration = 0.0001; // Initial deceleration factor
+    let deceleration = 0.0005; // Initial deceleration factor
     let lastPredictedStop = 0;
 
     // Populate the list with random words
     for (let i = 0; i < 2000; i++) {
         const word = document.createElement('div');
         word.className = 'word';
-        word.textContent = '8Word ' + i;
+        word.textContent = '9Word ' + i;
         wordList.appendChild(word);
     }
 
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const predIndex = Math.round(lastPredictedStop / 42);
 
         if (Math.abs(error) > 10) { // Threshold to avoid over-adjusting
-            deceleration -= error / 1000000; // Adjust this factor based on testing
+            deceleration -= error / 10000000; // Adjust this factor based on testing
         }
         if (wordItem) {
             wordItem.textContent += '(' + actualStop.toFixed(2) + ', ' + lastPredictedStop.toFixed(2) + ', ' + deceleration.toFixed(2) + ', ' + predIndex.toFixed(2) + ')';
