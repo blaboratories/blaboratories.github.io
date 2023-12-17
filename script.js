@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     for (let i = 0; i < 2000; i++) {
         const word = document.createElement('div');
         word.className = 'word';
-        word.textContent = 'Word ' + i;
+        word.textContent = '1Word ' + i;
         wordList.appendChild(word);
     }
 
@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }, false);
 
     wordList.addEventListener('touchend', function(e) {
+        let currentScrollTop = wordList.scrollTop;
         const touchEndTime = e.timeStamp;
         const touchEndY = e.changedTouches[0].clientY;
         const deltaY = touchEndY - touchStartY;
@@ -29,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const isFastSwipe = Math.abs(initialVelocity) > 2; // Adjust threshold as needed
 
         if (isFastSwipe) {
-            const predictedStop = wordList.scrollTop + (initialVelocity * decelerationFactor * 1000);
+            const predictedStop = currentScrollTop + (initialVelocity * decelerationFactor * 1000);
             lastPredictedStop = predictedStop;
             markPredictedStop(predictedStop);
             checkScrollEnd();
@@ -51,7 +52,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function markScrolledWord(scrollTop) {
         const itemIndex = Math.round(scrollTop / 42);
-        clearMarks();
         const wordItem = wordList.children[itemIndex];
         if (wordItem) {
             wordItem.textContent = 'SCROLLED';
@@ -68,20 +68,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function clearMarks() {
-        const words = wordList.getElementsByClassName('word');
-        for (let word of words) {
-            if (word.textContent.includes('SCROLLED') || word.textContent.includes('(PREDICTED)')) {
-                word.textContent = word.textContent.replace('SCROLLED', '').replace('(PREDICTED)', '').trim();
-                word.style.color = '';
-            }
-        }
-    }
-
     function adjustDecelerationFactor(actualStop) {
         const error = actualStop - lastPredictedStop;
+        const itemIndex = Math.round(actualStop / 42);
+        const wordItem = wordList.children[itemIndex];
+
         if (Math.abs(error) > 10) { // Threshold to avoid over-adjusting
             decelerationFactor += error / 1000; // Adjust this factor based on testing
+        }
+        if (wordItem) {
+            wordItem.textContent += ' (Error: ' + error.toFixed(2) + ', Decel: ' + decelerationFactor.toFixed(2) + ')';
+            wordItem.style.color = 'blue';
         }
     }
 });
