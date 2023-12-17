@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     const wordList = document.getElementById('wordList');
+    let touchStartTime = 0;
     let touchStartY = 0;
+    let touchEndTime = 0;
     let touchEndY = 0;
     let isScrolling;
 
@@ -13,12 +15,16 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     wordList.addEventListener('touchstart', function(e) {
+        touchStartTime = e.timeStamp;
         touchStartY = e.touches[0].clientY;
     }, false);
 
     wordList.addEventListener('touchend', function(e) {
+        touchEndTime = e.timeStamp;
         touchEndY = e.changedTouches[0].clientY;
-        const isFastSwipe = Math.abs(touchStartY - touchEndY) > 100;
+        const deltaY = Math.abs(touchStartY - touchEndY);
+        const deltaTime = touchEndTime - touchStartTime;
+        const isFastSwipe = deltaY > 100 && deltaTime < 500; // Adjust these values as needed
         if (isFastSwipe) {
             if (isScrolling) {
                 clearTimeout(isScrolling);
