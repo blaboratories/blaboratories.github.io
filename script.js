@@ -24,7 +24,8 @@ document.addEventListener('DOMContentLoaded', function() {
         touchEndY = e.changedTouches[0].clientY;
         const deltaY = Math.abs(touchStartY - touchEndY);
         const deltaTime = touchEndTime - touchStartTime;
-        const isFastSwipe = deltaY > 100 && deltaTime < 500; // Adjust these values as needed
+        const scrollSpeed = deltaY / deltaTime;
+        const isFastSwipe = scrollSpeed > 0.2; // Adjust these values as needed
         if (isFastSwipe) {
             if (isScrolling) {
                 clearTimeout(isScrolling);
@@ -47,9 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function markScrollArea(scrollTop, scrollDirection) {
-        const itemIndex = scrollDirection === 'down' 
-                          ? Math.round((scrollTop + wordList.clientHeight) / 50) // Mark bottom of view for downward scroll
-                          : Math.round(scrollTop / 50); // Mark top of view for upward scroll
+        const itemIndex = Math.round(scrollTop / 40); // Mark top of view for upward scroll
 
         const wordItem = wordList.children[itemIndex];
         if (wordItem) {
