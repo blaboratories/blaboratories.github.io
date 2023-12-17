@@ -4,13 +4,13 @@ document.addEventListener('DOMContentLoaded', function() {
     let touchStartY = 0;
     let touchEndTime = 0;
     let touchEndY = 0;
-    let isScrolling;
+    let isScrolling = false;
 
     // Populate the list with random words
     for (let i = 0; i < 2000; i++) {
         const word = document.createElement('div');
         word.className = 'word';
-        word.textContent = 'Word ' + i;
+        word.textContent = 'aWord ' + i;
         wordList.appendChild(word);
     }
 
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function markScrollArea(scrollTop, scrollDirection) {
-        const itemIndex = Math.round(scrollTop / 40); // Mark top of view for upward scroll
+        const itemIndex = Math.round(scrollTop / 42); // Mark top of view for upward scroll
 
         const wordItem = wordList.children[itemIndex];
         if (wordItem) {
