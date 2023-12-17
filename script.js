@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     for (let i = 0; i < 2000; i++) {
         const word = document.createElement('div');
         word.className = 'word';
-        word.textContent = '1Word ' + i;
+        word.textContent = '2Word ' + i;
         wordList.appendChild(word);
     }
 
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const isFastSwipe = Math.abs(initialVelocity) > 2; // Adjust threshold as needed
 
         if (isFastSwipe) {
-const predictedStop = currentScrollTop + (-(initialVelocity ** 2) / (2 * deceleration));
+const predictedStop = currentScrollTop + (initialVelocity ** 2) / (2 * deceleration);
             lastPredictedStop = predictedStop;
             markPredictedStop(predictedStop);
             checkScrollEnd();
