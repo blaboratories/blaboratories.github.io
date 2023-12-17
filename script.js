@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     for (let i = 0; i < 2000; i++) {
         const word = document.createElement('div');
         word.className = 'word';
-        word.textContent = '4Word ' + i;
+        word.textContent = '5Word ' + i;
         wordList.appendChild(word);
     }
 
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
             deceleration -= error / 1000; // Adjust this factor based on testing
         }
         if (wordItem) {
-            wordItem.textContent += ' (Error: ' + error.toFixed(2) + ', Decel: ' + deceleration.toFixed(2) + ')';
+            wordItem.textContent += ' (ActualStop: ' + actualStop.toFixed(2) + PredictedStop: ' + lastPredictedStop.toFixed(2) + Error: ' + error.toFixed(2) + ', Decel: ' + deceleration.toFixed(2) + ')';
             wordItem.style.color = 'blue';
         }
     }
