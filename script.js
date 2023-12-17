@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let touchStartTime = 0;
     let touchStartY = 0;
     let isScrolling = false;
-    let deceleration = 0.01; // Initial deceleration factor
+    let deceleration = 0.0001; // Initial deceleration factor
     let lastPredictedStop = 0;
 
     // Populate the list with random words
@@ -74,10 +74,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const wordItem = wordList.children[itemIndex];
 
         if (Math.abs(error) > 10) { // Threshold to avoid over-adjusting
-            deceleration -= error / 1000; // Adjust this factor based on testing
+            deceleration -= error / 100000; // Adjust this factor based on testing
         }
         if (wordItem) {
-            wordItem.textContent += ' (ActualStop: ' + actualStop.toFixed(2) + ', PredictedStop: ' + lastPredictedStop.toFixed(2) + ', Error: ' + error.toFixed(2) + ', Decel: ' + deceleration.toFixed(2) + ')';
+            wordItem.textContent += '('actualStop.toFixed(2) + ', ' + lastPredictedStop.toFixed(2) + ', ' + deceleration.toFixed(2) + ')';
             wordItem.style.color = 'blue';
         }
     }
