@@ -24,50 +24,59 @@ document.addEventListener('DOMContentLoaded', function() {
         const deltaY = touchEndY - touchStartY;
         const deltaTime = touchEndTime - touchStartTime;
         const initialVelocity = deltaY / deltaTime;
-        const isFastSwipe = Math.abs(initialVelocity) > 0.5; // Adjust this threshold as needed
+        const isFastSwipe = Math.abs(initialVelocity) > 2; // Adjust this threshold as needed
 
         if (isFastSwipe) {
             const predictedStop = wordList.scrollTop + (initialVelocity * decelerationFactor * 1000); // Adjust for scale
             markPredictedStop(predictedStop);
-            checkScrollEnd(predictedStop);
+            checkScrollEnd();
         }
     }, false);
 
-    function checkScrollEnd(predictedStop) {
+    function checkScrollEnd() {
         setTimeout(function() {
             if (isScrolling) {
                 const actualStop = wordList.scrollTop;
-                adjustDecelerationFactor(predictedStop, actualStop);
+                adjustDecelerationFactor(actualStop);
+                markScrolledWord(actualStop);
                 isScrolling = false;
             } else {
-                checkScrollEnd(predictedStop); // Keep checking until scrolling stops
+                checkScrollEnd();
             }
         }, 150);
     }
 
-    function markPredictedStop(predictedStop) {
-        const itemIndex = Math.round(predictedStop / 42);
-        clearPredictedMarks();
+    function markScrolledWord(scrollTop) {
+        const itemIndex = Math.round(scrollTop / 42); // Match the item height
         const wordItem = wordList.children[itemIndex];
         if (wordItem) {
-            wordItem.textContent = 'PREDICTED';
+            clearMarks();
+            wordItem.textContent = 'SCROLLED';
+            wordItem.style.color = 'green';
+        }
+    }
+
+    function markPredictedStop(predictedStop) {
+        const itemIndex = Math.round(predictedStop / 42);
+        const wordItem = wordList.children[itemIndex];
+        if (wordItem) {
+            wordItem.textContent += ' (PREDICTED)';
             wordItem.style.color = 'blue';
         }
     }
 
-    function clearPredictedMarks() {
+    function clearMarks() {
         const words = wordList.getElementsByClassName('word');
         for (let word of words) {
-            if (word.textContent.includes('PREDICTED')) {
-                word.textContent = word.textContent.replace('PREDICTED', '');
+            if (word.textContent.includes('SCROLLED')) {
+                word.textContent = word.textContent.replace('SCROLLED', '');
                 word.style.color = '';
             }
         }
     }
 
-    function adjustDecelerationFactor(predictedStop, actualStop) {
-        // Adjust the deceleration factor based on the difference between predicted and actual stop
-        const error = actualStop - predictedStop;
+    function adjustDecelerationFactor(actualStop) {
+       const error = actualStop - predictedStop;
         if (Math.abs(error) > 10) { // Threshold to avoid over-adjusting for small errors
             decelerationFactor += error / 1000; // Adjust this factor based on testing
         }
