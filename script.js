@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let touchStartTime = 0;
     let touchStartY = 0;
     let isScrolling = false;
-    let decelerationFactor = 0.5; // Initial deceleration factor
+    let deceleration = 0.5; // Initial deceleration factor
     let lastPredictedStop = 0;
 
     // Populate the list with random words
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const isFastSwipe = Math.abs(initialVelocity) > 2; // Adjust threshold as needed
 
         if (isFastSwipe) {
-            const predictedStop = currentScrollTop + (initialVelocity * decelerationFactor * 1000);
+const predictedStop = currentScrollTop + (-(initialVelocity ** 2) / (2 * deceleration));
             lastPredictedStop = predictedStop;
             markPredictedStop(predictedStop);
             checkScrollEnd();
@@ -74,10 +74,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const wordItem = wordList.children[itemIndex];
 
         if (Math.abs(error) > 10) { // Threshold to avoid over-adjusting
-            decelerationFactor -= error / 1000; // Adjust this factor based on testing
+            deceleration -= error / 1000; // Adjust this factor based on testing
         }
         if (wordItem) {
-            wordItem.textContent += ' (Error: ' + error.toFixed(2) + ', Decel: ' + decelerationFactor.toFixed(2) + ')';
+            wordItem.textContent += ' (Error: ' + error.toFixed(2) + ', Decel: ' + deceleration.toFixed(2) + ')';
             wordItem.style.color = 'blue';
         }
     }
