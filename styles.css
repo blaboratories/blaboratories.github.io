@@ -11,5 +11,9 @@ body, html {
 }
 
 .word {
-    margin: 5px 0;
+    height: 40px; /* Set the height of each item */
+    line-height: 40px; /* Center the text vertically */
+    margin-bottom: 2px; /* Optional: adds space between items */
+    /* Add other styling as needed */
 }
+
