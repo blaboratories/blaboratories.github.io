@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     for (let i = 0; i < 2000; i++) {
         const word = document.createElement('div');
         word.className = 'word';
-        word.textContent = '5Word ' + i;
+        word.textContent = '2Word ' + i;
         wordList.appendChild(word);
     }
 
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const deltaY = Math.abs(touchStartY - touchEndY);
         const deltaTime = touchEndTime - touchStartTime;
         const scrollSpeed = deltaY / deltaTime;
-        const isFastSwipe = scrollSpeed > 5; // Adjust these values as needed
+        const isFastSwipe = scrollSpeed > 2; // Adjust these values as needed
         if (isFastSwipe) {
             if (isScrolling) {
                 clearTimeout(isScrolling);
