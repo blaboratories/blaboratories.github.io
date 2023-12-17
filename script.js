@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const wordItem = wordList.children[itemIndex];
 
         if (Math.abs(error) > 10) { // Threshold to avoid over-adjusting
-            decelerationFactor += error / 1000; // Adjust this factor based on testing
+            decelerationFactor -= error / 1000; // Adjust this factor based on testing
         }
         if (wordItem) {
             wordItem.textContent += ' (Error: ' + error.toFixed(2) + ', Decel: ' + decelerationFactor.toFixed(2) + ')';
