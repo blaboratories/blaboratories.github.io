@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let touchStartTime = 0;
     let touchStartY = 0;
     let isScrolling = false;
-    let deceleration = 0.5; // Initial deceleration factor
+    let deceleration = 1000; // Initial deceleration factor
     let lastPredictedStop = 0;
 
     // Populate the list with random words
