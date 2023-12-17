@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const deltaY = Math.abs(touchStartY - touchEndY);
         const deltaTime = touchEndTime - touchStartTime;
         const scrollSpeed = deltaY / deltaTime;
-        const isFastSwipe = scrollSpeed > 10; // Adjust these values as needed
+        const isFastSwipe = scrollSpeed > 100; // Adjust these values as needed
         if (isFastSwipe) {
             if (isScrolling) {
                 clearTimeout(isScrolling);
