@@ -3,14 +3,14 @@ document.addEventListener('DOMContentLoaded', function() {
     let touchStartTime = 0;
     let touchStartY = 0;
     let isScrolling = false;
-    let deceleration = 0.001; // Initial deceleration factor
+    let deceleration = 0.0001; // Initial deceleration factor
     let lastPredictedStop = 0;
 
     // Populate the list with random words
     for (let i = 0; i < 2000; i++) {
         const word = document.createElement('div');
         word.className = 'word';
-        word.textContent = '7Word ' + i;
+        word.textContent = '8Word ' + i;
         wordList.appendChild(word);
     }
 
