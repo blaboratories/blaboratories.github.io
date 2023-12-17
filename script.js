@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     for (let i = 0; i < 2000; i++) {
         const word = document.createElement('div');
         word.className = 'word';
-        word.textContent = '6Word ' + i;
+        word.textContent = '7Word ' + i;
         wordList.appendChild(word);
     }
 
@@ -72,12 +72,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const error = actualStop - lastPredictedStop;
         const itemIndex = Math.round(actualStop / 42);
         const wordItem = wordList.children[itemIndex];
+        const predIndex = Math.round(lastPredictedStop / 42);
 
         if (Math.abs(error) > 10) { // Threshold to avoid over-adjusting
             deceleration -= error / 1000000; // Adjust this factor based on testing
         }
         if (wordItem) {
-            wordItem.textContent += '(' + actualStop.toFixed(2) + ', ' + lastPredictedStop.toFixed(2) + ', ' + deceleration.toFixed(2) + ')';
+            wordItem.textContent += '(' + actualStop.toFixed(2) + ', ' + lastPredictedStop.toFixed(2) + ', ' + deceleration.toFixed(2) + ', ' + predIndex.toFixed(2) + ')';
             wordItem.style.color = 'blue';
         }
     }
