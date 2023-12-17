@@ -1,9 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
     const wordList = document.getElementById('wordList');
-    let touchStartTime, touchStartY, touchEndTime, touchEndY;
-    let decelerationFactor = 0.5; // Initial guess for the deceleration factor
+    let touchStartTime = 0;
+    let touchStartY = 0;
     let isScrolling = false;
-    let predictedStop;
+    let decelerationFactor = 0.5; // Initial deceleration factor
+    let lastPredictedStop = 0;
 
     // Populate the list with random words
     for (let i = 0; i < 2000; i++) {
@@ -16,39 +17,42 @@ document.addEventListener('DOMContentLoaded', function() {
     wordList.addEventListener('touchstart', function(e) {
         touchStartTime = e.timeStamp;
         touchStartY = e.touches[0].clientY;
+        isScrolling = true;
     }, false);
 
     wordList.addEventListener('touchend', function(e) {
-        touchEndTime = e.timeStamp;
-        touchEndY = e.changedTouches[0].clientY;
+        const touchEndTime = e.timeStamp;
+        const touchEndY = e.changedTouches[0].clientY;
         const deltaY = touchEndY - touchStartY;
         const deltaTime = touchEndTime - touchStartTime;
         const initialVelocity = deltaY / deltaTime;
-        const isFastSwipe = Math.abs(initialVelocity) > 2; // Adjust this threshold as needed
+        const isFastSwipe = Math.abs(initialVelocity) > 2; // Adjust threshold as needed
 
         if (isFastSwipe) {
-            predictedStop = wordList.scrollTop + (initialVelocity * decelerationFactor * 1000); // Adjust for scale
+            const predictedStop = wordList.scrollTop + (initialVelocity * decelerationFactor * 1000);
+            lastPredictedStop = predictedStop;
             markPredictedStop(predictedStop);
             checkScrollEnd();
         }
     }, false);
 
     function checkScrollEnd() {
+        let currentScrollTop = wordList.scrollTop;
         setTimeout(function() {
-            if (wordList.scrollTop === predictedStop || !isScrolling) {
-                markScrolledWord(wordList.scrollTop);
+            if (wordList.scrollTop === currentScrollTop) {
+                markScrolledWord(currentScrollTop);
+                adjustDecelerationFactor(currentScrollTop);
                 isScrolling = false;
             } else {
-                isScrolling = true;
                 checkScrollEnd();
             }
         }, 150);
     }
 
     function markScrolledWord(scrollTop) {
-        const itemIndex = Math.round(scrollTop / 42); // Match the item height
-        const wordItem = wordList.children[itemIndex];
+        const itemIndex = Math.round(scrollTop / 42);
         clearMarks();
+        const wordItem = wordList.children[itemIndex];
         if (wordItem) {
             wordItem.textContent = 'SCROLLED';
             wordItem.style.color = 'green';
@@ -75,8 +79,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function adjustDecelerationFactor(actualStop) {
-        const error = actualStop - predictedStop;
-        if (Math.abs(error) > 10) { // Threshold to avoid over-adjusting for small errors
+        const error = actualStop - lastPredictedStop;
+        if (Math.abs(error) > 10) { // Threshold to avoid over-adjusting
             decelerationFactor += error / 1000; // Adjust this factor based on testing
         }
     }
