@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
             deceleration -= error / 100000; // Adjust this factor based on testing
         }
         if (wordItem) {
-            wordItem.textContent += '('actualStop.toFixed(2) + ', ' + lastPredictedStop.toFixed(2) + ', ' + deceleration.toFixed(2) + ')';
+            wordItem.textContent += '(' + actualStop.toFixed(2) + ', ' + lastPredictedStop.toFixed(2) + ', ' + deceleration.toFixed(2) + ')';
             wordItem.style.color = 'blue';
         }
     }
