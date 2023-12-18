@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     for (let i = 0; i < 4000; i++) {
         const word = document.createElement('div');
         word.className = 'word';
-        word.textContent = 'logWord ' + i;
+        word.textContent = '1Word ' + i;
         wordList.appendChild(word);
     }
 
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const deltaY = touchEndY - touchStartY;
         const deltaTime = touchEndTime - touchStartTime;
         const initialVelocity = deltaY / deltaTime;
-        const isFastSwipe = Math.abs(initialVelocity) > 2; // Adjust threshold as needed
+        const isFastSwipe = Math.abs(initialVelocity) > 1; // Adjust threshold as needed
 
         if (isFastSwipe) {
             //let lastScrollTop = currentScrollTop;
@@ -43,6 +43,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                // Log data for analysis
                 console.log(predictionCount + ', ' + newTime + ', ' + newScrollTop + ', ' + newVelocity);
+                const wordItem = wordList.children[predictionCount];
+                if (wordItem) {
+                    wordItem.textContent += predictionCount + ', ' + newTime + ', ' + newScrollTop + ', ' + newVelocity;
+                    wordItem.style.color = 'blue';
+                }
                 // Check if scrolling has stopped
                 if (Math.abs(newVelocity) < 1) { // someThreshold is a small value
                     sampleData.push({ scrollTop: newScrollTop, time: newTime });
