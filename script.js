@@ -29,29 +29,31 @@ document.addEventListener('DOMContentLoaded', function() {
     const initialVelocity = deltaY / deltaTime;
     const isFastSwipe = Math.abs(initialVelocity) > 2; // Adjust threshold as needed
 
-    if (isFastSwipe) {
-        let lastScrollTop = currentScrollTop;
-        let lastVelocity = initialVelocity;
-        const interval = 0.1 * 1000; // 0.1 seconds in milliseconds
+// Inside the touchend event listener
+if (isFastSwipe) {
+    let lastScrollTop = currentScrollTop;
+    let lastTime = touchEndTime;
+    const measurement = setInterval(function() {
+        const newScrollTop = wordList.scrollTop;
+        const newTime = Date.now();
+        const timeDiff = newTime - lastTime;
+        const newVelocity = (newScrollTop - lastScrollTop) / timeDiff;
 
-        const measurement = setInterval(function() {
-            const newScrollTop = wordList.scrollTop;
-            const newVelocity = (newScrollTop - lastScrollTop) / interval;
+        // Predict stopping point based on deceleration
+        const remainingTime = Math.abs(newVelocity / deceleration); // Time to stop
+        const predictedStop = newScrollTop + (newVelocity * remainingTime) + (0.5 * deceleration * remainingTime ** 2);
+        
+        // Update for next interval
+        lastScrollTop = newScrollTop;
+        lastTime = newTime;
 
-            // Predict stopping point based on deceleration
-            // Adjust the prediction logic as needed
-            const predictedStop = newScrollTop + (newVelocity ** 2) / (2 * deceleration);
-            
-            // Update for next interval
-            lastScrollTop = newScrollTop;
-            lastVelocity = newVelocity;
-
-            // Check if scrolling has stopped
-            if (Math.abs(newVelocity) < someThreshold) { // someThreshold is a small value
-                clearInterval(measurement);
-                markPredictedStop(predictedStop);
-            }
-        }, interval);
+        // Check if scrolling has stopped
+        if (Math.abs(newVelocity) < someThreshold) { // someThreshold is a small value
+            clearInterval(measurement);
+            markPredictedStop(predictedStop, predictionCount++);
+        }
+    }, interval);
+}
     }
 
     function checkScrollEnd(predictedStop) {
