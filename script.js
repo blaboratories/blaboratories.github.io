@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const someThreshold = 0.1; // Define a small value as a threshold
 
     // Populate the list with random words
-    for (let i = 0; i < 2000; i++) {
+    for (let i = 0; i < 4000; i++) {
         const word = document.createElement('div');
         word.className = 'word';
         word.textContent = '100msWord ' + i;
@@ -43,17 +43,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (newVelocity === 0) {
                     clearInterval(measurement);
                 }
+                const wordItem = wordList.children[predictionCount];
+                if (wordItem) {
+                    wordItem.textContent += predictionCount + ', ' + newTime + ', ' + newScrollTop;
+                    wordItem.style.color = 'green';
+                }
                 // Check if scrolling has stopped
                 if (Math.abs(newVelocity) < 1) { // someThreshold is a small value
                     sampleData.push({ scrollTop: newScrollTop, time: newTime });
-                    const itemIndex = Math.round(predictedStop / 42);
+                    //const itemIndex = Math.round(predictedStop / 42);
                     const wordItem = wordList.children[predictionCount];
                     if (wordItem) {
                         wordItem.textContent += predictionCount + ', ' + newTime + ', ' + newScrollTop;
                         wordItem.style.color = 'blue';
                     }
-                    
-                    predictionCount++
                     if (sampleData.length === 100) {
                         //const predictedStop = estimateStoppingPosition(sampleData);
                         //markPredictedStop(predictedStop, predictionCount++);
@@ -63,6 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     //markPredictedStop(predictedStop, predictionCount++);
                 }
+                predictionCount++
                 // Update for next interval
                 lastScrollTop = newScrollTop;
                 lastTime = newTime;
