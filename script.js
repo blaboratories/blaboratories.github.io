@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let isScrolling = false;
     let sampleData = []; // Array to store samples
     let predictionCount = 0; // To keep track of the number of predictions made
-    const interval = 100; // 0.1 seconds in milliseconds
+    const interval = 1000; // 1 seconds in milliseconds
 
     // Populate the list with random words
     for (let i = 0; i < 4000; i++) {
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (isFastSwipe) {
             //let lastScrollTop = currentScrollTop;
-            //let lastTime = touchEndTime;
+            let lastTime = touchEndTime;
             const measurement = setInterval(function() {
                 const newScrollTop = wordList.scrollTop;
                 const newTime = Date.now();
