@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let isScrolling = false;
     let deceleration = 0.0005; // Initial deceleration factor
     let predictionCount = 0; // To keep track of the number of predictions made
+    const interval = 100; // 0.1 seconds in milliseconds
+    const someThreshold = 0.1; // Define a small value as a threshold
 
     // Populate the list with random words
     for (let i = 0; i < 2000; i++) {
@@ -21,40 +23,39 @@ document.addEventListener('DOMContentLoaded', function() {
     }, false);
 
     wordList.addEventListener('touchend', function(e) {
-    let currentScrollTop = wordList.scrollTop;
-    const touchEndTime = e.timeStamp;
-    const touchEndY = e.changedTouches[0].clientY;
-    const deltaY = touchEndY - touchStartY;
-    const deltaTime = touchEndTime - touchStartTime;
-    const initialVelocity = deltaY / deltaTime;
-    const isFastSwipe = Math.abs(initialVelocity) > 2; // Adjust threshold as needed
+        let currentScrollTop = wordList.scrollTop;
+        const touchEndTime = e.timeStamp;
+        const touchEndY = e.changedTouches[0].clientY;
+        const deltaY = touchEndY - touchStartY;
+        const deltaTime = touchEndTime - touchStartTime;
+        const initialVelocity = deltaY / deltaTime;
+        const isFastSwipe = Math.abs(initialVelocity) > 2; // Adjust threshold as needed
 
-// Inside the touchend event listener
-if (isFastSwipe) {
-    let lastScrollTop = currentScrollTop;
-    let lastTime = touchEndTime;
-    const measurement = setInterval(function() {
-        const newScrollTop = wordList.scrollTop;
-        const newTime = Date.now();
-        const timeDiff = newTime - lastTime;
-        const newVelocity = (newScrollTop - lastScrollTop) / timeDiff;
+        if (isFastSwipe) {
+            let lastScrollTop = currentScrollTop;
+            let lastTime = touchEndTime;
+            const measurement = setInterval(function() {
+                const newScrollTop = wordList.scrollTop;
+                const newTime = Date.now();
+                const timeDiff = newTime - lastTime;
+                const newVelocity = (newScrollTop - lastScrollTop) / timeDiff;
 
-        // Predict stopping point based on deceleration
-        const remainingTime = Math.abs(newVelocity / deceleration); // Time to stop
-        const predictedStop = newScrollTop + (newVelocity * remainingTime) + (0.5 * deceleration * remainingTime ** 2);
-        
-        // Update for next interval
-        lastScrollTop = newScrollTop;
-        lastTime = newTime;
+                // Predict stopping point based on deceleration
+                const remainingTime = Math.abs(newVelocity / deceleration); // Time to stop
+                const predictedStop = newScrollTop + (newVelocity * remainingTime) + (0.5 * deceleration * remainingTime ** 2);
+                
+                // Update for next interval
+                lastScrollTop = newScrollTop;
+                lastTime = newTime;
 
-        // Check if scrolling has stopped
-        if (Math.abs(newVelocity) < someThreshold) { // someThreshold is a small value
-            clearInterval(measurement);
-            markPredictedStop(predictedStop, predictionCount++);
+                // Check if scrolling has stopped
+                if (Math.abs(newVelocity) < someThreshold) { // someThreshold is a small value
+                    clearInterval(measurement);
+                    markPredictedStop(predictedStop, predictionCount++);
+                }
+            }, interval);
         }
-    }, interval);
-}
-    }
+    }, false);
 
     function checkScrollEnd(predictedStop) {
         let currentScrollTop = wordList.scrollTop;
@@ -96,7 +97,7 @@ if (isFastSwipe) {
             deceleration -= error / 10000000; // Adjust this factor based on testing
         }
         if (wordItem) {
-            wordItem.textContent += '(' + actualStop.toFixed(2) + ', ' + predictedStop.toFixed(2) + ', ' + deceleration.toFixed(2) + ')';
+            wordItem.textContent += ' (Error: ' + error.toFixed(2) + ', Decel: ' + deceleration.toFixed(2) + ')';
             wordItem.style.color = 'blue';
         }
     }
