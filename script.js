@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     for (let i = 0; i < 4000; i++) {
         const word = document.createElement('div');
         word.className = 'word';
-        word.textContent = 'Word ' + i;
+        word.textContent = '1Word ' + i;
         wordList.appendChild(word);
     }
 
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 if (Math.abs(newVelocity) < 1) {
                     sampleData.push({ scrollTop: newScrollTop, time: newTime });
-                    if (sampleData.length === 100) {
+                    if (newVelocity === 0) {
                         clearInterval(measurement);
                     }
                 }
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (predictionCount < wordList.children.length) {
                     const wordItem = wordList.children[predictionCount];
                     if (wordItem) {
-                        wordItem.textContent += predictionCount + ', ' + newTime-touchStartTime + ', ' + newScrollTop.toFixed(2) + ', ' + newVelocity.toFixed(2);
+                        wordItem.textContent = predictionCount + ', ' + (newTime-touchStartTime) + ', ' + newScrollTop.toFixed(2) + ', ' + newVelocity.toFixed(2);
                         wordItem.style.color = 'blue';
                     }
                 }
