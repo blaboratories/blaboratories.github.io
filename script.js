@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     for (let i = 0; i < 4000; i++) {
         const word = document.createElement('div');
         word.className = 'word';
-        word.textContent = '100msWord ' + i;
+        word.textContent = 'Word ' + i;
         wordList.appendChild(word);
     }
 
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 const wordItem = wordList.children[predictionCount];
                 if (wordItem) {
-                    wordItem.textContent += predictionCount + ', ' + newTime + ', ' + newScrollTop;
+                    wordItem.textContent += predictionCount + ', ' + newTime + ', ' + newScrollTop + ', ' + newVelocity;
                     wordItem.style.color = 'green';
                 }
                 // Check if scrolling has stopped
