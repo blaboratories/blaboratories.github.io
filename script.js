@@ -2,29 +2,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const wordList = document.getElementById('wordList');
     let touchStartTime = 0;
     let touchStartY = 0;
-    let isScrolling = false;
-    let sampleData = []; // Array to store samples
-    let predictionCount = 0; // To keep track of the number of predictions made
-    const interval = 1000; // 1 seconds in milliseconds
-
-    // Populate the list with random words
-    for (let i = 0; i < 4000; i++) {
-        const word = document.createElement('div');
-        word.className = 'word';
-        word.textContent = '1Word ' + i;
-        wordList.appendChild(word);
-    }
-
-    wordList.addEventListener('touchstart', function(e) {
-        touchStartTime = e.timeStamp;
-        touchStartY = e.touches[0].clientY;
-        isScrolling = true;
-    }, false);
-
-document.addEventListener('DOMContentLoaded', function() {
-    const wordList = document.getElementById('wordList');
-    let touchStartTime = 0;
-    let touchStartY = 0;
     let sampleData = [];
     let predictionCount = 0;
     const interval = 100; // Reduced to 0.1 seconds
