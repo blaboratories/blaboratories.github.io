@@ -21,53 +21,65 @@ document.addEventListener('DOMContentLoaded', function() {
         isScrolling = true;
     }, false);
 
+document.addEventListener('DOMContentLoaded', function() {
+    const wordList = document.getElementById('wordList');
+    let touchStartTime = 0;
+    let touchStartY = 0;
+    let sampleData = [];
+    let predictionCount = 0;
+    const interval = 100; // Reduced to 0.1 seconds
+
+    for (let i = 0; i < 4000; i++) {
+        const word = document.createElement('div');
+        word.className = 'word';
+        word.textContent = 'Word ' + i;
+        wordList.appendChild(word);
+    }
+
+    wordList.addEventListener('touchstart', function(e) {
+        touchStartTime = e.timeStamp;
+        touchStartY = e.touches[0].clientY;
+    }, false);
+
     wordList.addEventListener('touchend', function(e) {
-        let currentScrollTop = wordList.scrollTop;
         const touchEndTime = e.timeStamp;
         const touchEndY = e.changedTouches[0].clientY;
         const deltaY = touchEndY - touchStartY;
         const deltaTime = touchEndTime - touchStartTime;
         const initialVelocity = deltaY / deltaTime;
-        const isFastSwipe = Math.abs(initialVelocity) > 1; // Adjust threshold as needed
+        const isFastSwipe = Math.abs(initialVelocity) > 1;
 
         if (isFastSwipe) {
-            //let lastScrollTop = currentScrollTop;
+            let lastScrollTop = wordList.scrollTop;
             let lastTime = touchEndTime;
+
             const measurement = setInterval(function() {
                 const newScrollTop = wordList.scrollTop;
                 const newTime = Date.now();
                 const timeDiff = newTime - lastTime;
                 const newVelocity = (newScrollTop - lastScrollTop) / timeDiff;
-                if (newVelocity === 0) {
-                    clearInterval(measurement);
-                }
-               // Log data for analysis
-                console.log(predictionCount + ', ' + newTime + ', ' + newScrollTop + ', ' + newVelocity);
-                const wordItem = wordList.children[predictionCount];
-                if (wordItem) {
-                    wordItem.textContent += predictionCount + ', ' + newTime + ', ' + newScrollTop + ', ' + newVelocity;
-                    wordItem.style.color = 'blue';
-                }
-                // Check if scrolling has stopped
-                if (Math.abs(newVelocity) < 1) { // someThreshold is a small value
+
+                if (Math.abs(newVelocity) < 1) {
                     sampleData.push({ scrollTop: newScrollTop, time: newTime });
                     if (sampleData.length === 100) {
-                        //const predictedStop = estimateStoppingPosition(sampleData);
-                        //markPredictedStop(predictedStop, predictionCount++);
+                        clearInterval(measurement);
                     }
-                      // Store all newScrollTop and newTime in a vector and at each multiple of 10 samples added
-                    // use all samples stored so far to estimate where it will stop
-                    
-                    //markPredictedStop(predictedStop, predictionCount++);
                 }
-                predictionCount++
-                // Update for next interval
+
+                if (predictionCount < wordList.children.length) {
+                    const wordItem = wordList.children[predictionCount];
+                    if (wordItem) {
+                        wordItem.textContent += ' ' + predictionCount + ', ' + newTime + ', ' + newScrollTop + ', ' + newVelocity;
+                        wordItem.style.color = 'blue';
+                    }
+                }
+                predictionCount++;
                 lastScrollTop = newScrollTop;
                 lastTime = newTime;
-
             }, interval);
         }
     }, false);
+
 
     function markScrolledWord(scrollTop) {
         const itemIndex = Math.round(scrollTop / 42);
