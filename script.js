@@ -4,12 +4,12 @@ document.addEventListener('DOMContentLoaded', function() {
     let touchStartY = 0;
     let sampleData = [];
     let predictionCount = 0;
-    const interval = 10; // Reduced to 0.1 seconds
+    const interval = 100; // Reduced to 0.1 seconds
 
     for (let i = 0; i < 4000; i++) {
         const word = document.createElement('div');
         word.className = 'word';
-        word.textContent = '10Word ' + i;
+        word.textContent = '100Word ' + i;
         wordList.appendChild(word);
     }
 
