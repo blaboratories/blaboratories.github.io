@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }, false);
 
     wordList.addEventListener('touchend', function(e) {
-        //let currentScrollTop = wordList.scrollTop;
+        let currentScrollTop = wordList.scrollTop;
         const touchEndTime = e.timeStamp;
         const touchEndY = e.changedTouches[0].clientY;
         const deltaY = touchEndY - touchStartY;
