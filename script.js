@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (predictionCount < wordList.children.length) {
                     const wordItem = wordList.children[predictionCount];
                     if (wordItem) {
-                        wordItem.textContent += ' ' + predictionCount + ', ' + newTime + ', ' + newScrollTop + ', ' + newVelocity;
+                        wordItem.textContent += predictionCount + ', ' + newTime-touchStartTime + ', ' + newScrollTop.toFixed(2) + ', ' + newVelocity.toFixed(2);
                         wordItem.style.color = 'blue';
                     }
                 }
