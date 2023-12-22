@@ -3,13 +3,13 @@ document.addEventListener('DOMContentLoaded', function() {
     let touchStartTime = 0;
     let touchStartY = 0;
     let sampleData = [];
-    let predictionCount = 0;
+    let predictionNumber = 0;
     const interval = 100; // Reduced to 0.1 seconds
 
     for (let i = 0; i < 4000; i++) {
         const word = document.createElement('div');
         word.className = 'word';
-        word.textContent = '6Word ' + i;
+        word.textContent = 'Word ' + i;
         wordList.appendChild(word);
     }
 
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const itemIndex = Math.round(predictedStop / 42);
         const wordItem = wordList.children[itemIndex];
         if (wordItem) {
-            wordItem.textContent += ' (PREDICTED' + predictionNumber + ')';
+            wordItem.textContent = '(PREDICTED)';
             wordItem.style.color = 'blue';
             predictionNumber++;
         }
