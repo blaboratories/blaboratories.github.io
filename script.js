@@ -32,25 +32,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const measurement = setInterval(function() {
                 const newScrollTop = wordList.scrollTop;
-                const newTime = Date.now();
-                const timeDiff = newTime - lastTime;
-                const newVelocity = (newScrollTop - lastScrollTop) / timeDiff;
+                //const newTime = Date.now();
+                //const timeDiff = newTime - lastTime;
+                //const newVelocity = (newScrollTop - lastScrollTop) / timeDiff;
 
-                if (Math.abs(newVelocity) < 1) {
-                    sampleData.push({ scrollTop: newScrollTop, time: newTime });
-                    if (newVelocity === 0) {
-                        clearInterval(measurement);
+                if (newScrollTop === lastScrollTop) {
+                    //sampleData.push({ scrollTop: newScrollTop, time: newTime });
+                    clearInterval(measurement);
+                    if (predictionCount < wordList.children.length) {
+                        const wordItem = wordList.children[predictionCount];
+                        const deltaY = lastScrollTop - touchEndY;
+                        if (wordItem) {
+                            wordItem.textContent = initialVelocity.toFixed(4) + ', ' + deltaY.toFixed(4);
+                            wordItem.style.color = 'blue';
+                        }
                     }
+                    predictionCount++;
                 }
-
-                if (predictionCount < wordList.children.length) {
-                    const wordItem = wordList.children[predictionCount];
-                    if (wordItem) {
-                        wordItem.textContent = predictionCount + ', ' + (newTime-touchStartTime) + ', ' + newScrollTop.toFixed(2) + ', ' + newVelocity.toFixed(2);
-                        wordItem.style.color = 'blue';
-                    }
-                }
-                predictionCount++;
                 lastScrollTop = newScrollTop;
                 lastTime = newTime;
             }, interval);
