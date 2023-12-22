@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     for (let i = 0; i < 4000; i++) {
         const word = document.createElement('div');
         word.className = 'word';
-        word.textContent = '100Word ' + i;
+        word.textContent = 'Word ' + i;
         wordList.appendChild(word);
     }
 
@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }, false);
 
     wordList.addEventListener('touchend', function(e) {
+        const startTopY = wordList.scrollTop;
         const touchEndTime = e.timeStamp;
         const touchEndY = e.changedTouches[0].clientY;
         const deltaY = touchEndY - touchStartY;
@@ -43,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         const wordItem = wordList.children[predictionCount];
                         const deltaY = lastScrollTop - touchEndY;
                         if (wordItem) {
-                            wordItem.textContent = initialVelocity.toFixed(4) + ', ' + deltaY.toFixed(4);
+                            wordItem.textContent = initialVelocity.toFixed(5) + ', ' + deltaY.toFixed(2);
                             wordItem.style.color = 'blue';
                         }
                     }
