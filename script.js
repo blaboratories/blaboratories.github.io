@@ -26,12 +26,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const deltaTime = touchEndTime - touchStartTime;
         const initialVelocity = deltaY / deltaTime;
         const isFastSwipe = Math.abs(initialVelocity) > 1;
-        predictedStop = startTopY + 7371;
+        const predictedStop = startTopY + 7371;
+        wordList.children[0].textContent = predictedStop;
         const itemIndex = Math.round(predictedStop / 42);
         const wordItem = wordList.children[itemIndex];
         if (wordItem) {
             wordItem.textContent += ' (PREDICTED' + predictionNumber + ')';
             wordItem.style.color = 'blue';
+            predictionNumber++;
         }
 
         if (false) {
