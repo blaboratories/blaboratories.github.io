@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     for (let i = 0; i < 4000; i++) {
         const word = document.createElement('div');
         word.className = 'word';
-        word.textContent = 'Word ' + i;
+        word.textContent = '6Word ' + i;
         wordList.appendChild(word);
     }
 
@@ -28,9 +28,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const isFastSwipe = Math.abs(initialVelocity) > 1;
 
         if (isFastSwipe) {
-            let lastScrollTop = wordList.scrollTop;
-            let lastTime = touchEndTime;
-
+            let lastScrollTop = startTopY;
+            //let lastTime = touchEndTime;
             const measurement = setInterval(function() {
                 const newScrollTop = wordList.scrollTop;
                 //const newTime = Date.now();
@@ -42,16 +41,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     clearInterval(measurement);
                     if (predictionCount < wordList.children.length) {
                         const wordItem = wordList.children[predictionCount];
-                        const deltaY = lastScrollTop - touchEndY;
+                        const deltaY = lastScrollTop - startTopY;
                         if (wordItem) {
-                            wordItem.textContent = initialVelocity.toFixed(5) + ', ' + deltaY.toFixed(2);
+                            wordItem.textContent = initialVelocity.toFixed(6) + ', ' + deltaY.toFixed(1);
                             wordItem.style.color = 'blue';
                         }
                     }
                     predictionCount++;
                 }
                 lastScrollTop = newScrollTop;
-                lastTime = newTime;
+                //lastTime = newTime;
             }, interval);
         }
     }, false);
