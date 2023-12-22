@@ -26,8 +26,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const deltaTime = touchEndTime - touchStartTime;
         const initialVelocity = deltaY / deltaTime;
         const isFastSwipe = Math.abs(initialVelocity) > 1;
+        predictedStop = startTopY + 7371;
+        const itemIndex = Math.round(predictedStop / 42);
+        const wordItem = wordList.children[itemIndex];
+        if (wordItem) {
+            wordItem.textContent += ' (PREDICTED' + predictionNumber + ')';
+            wordItem.style.color = 'blue';
+        }
 
-        if (isFastSwipe) {
+        if (false) {
             let lastScrollTop = startTopY;
             //let lastTime = touchEndTime;
             const measurement = setInterval(function() {
@@ -37,17 +44,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 //const newVelocity = (newScrollTop - lastScrollTop) / timeDiff;
 
                 if (newScrollTop === lastScrollTop) {
-                    //sampleData.push({ scrollTop: newScrollTop, time: newTime });
+                //   //sampleData.push({ scrollTop: newScrollTop, time: newTime });
                     clearInterval(measurement);
-                    if (predictionCount < wordList.children.length) {
-                        const wordItem = wordList.children[predictionCount];
-                        const deltaY = lastScrollTop - startTopY;
-                        if (wordItem) {
-                            wordItem.textContent = initialVelocity.toFixed(6) + ', ' + deltaY.toFixed(1);
-                            wordItem.style.color = 'blue';
-                        }
-                    }
-                    predictionCount++;
+                 //   if (predictionCount < wordList.children.length) {
+                  //      const wordItem = wordList.children[predictionCount];
+                  //      const deltaY = lastScrollTop - startTopY;
+                   //     if (wordItem) {
+                   //         wordItem.textContent = initialVelocity.toFixed(6) + ', ' + deltaY.toFixed(1);
+                    //        wordItem.style.color = 'blue';
+                      //  }
+                    //}
+                    //predictionCount++;
                 }
                 lastScrollTop = newScrollTop;
                 //lastTime = newTime;
